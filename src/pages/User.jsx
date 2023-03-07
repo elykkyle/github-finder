@@ -3,14 +3,17 @@ import { useEffect, useContext } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import GithubContext from '../context/github/GithubContext';
 import Spinner from '../components/layout/Spinner';
+import RepoList from '../components/layout/repos/RepoList';
 
 export default function User() {
-  const { getUser, user, loading } = useContext(GithubContext);
+  const { getUser, user, loading, getUserRepos, repos } =
+    useContext(GithubContext);
 
   const params = useParams();
 
   useEffect(() => {
     getUser(params.login);
+    getUserRepos(params.login);
   }, []);
 
   const {
@@ -99,7 +102,10 @@ export default function User() {
                 <div className='stat'>
                   <div className='stat-title text-md'>Twitter</div>
                   <div className='text-lg stat-value'>
-                    <a href={`https://twitter.com/${twitter_username}`}>
+                    <a
+                      href={`https://twitter.com/${twitter_username}`}
+                      target='_blank'
+                      rel='noreferrer'>
                       {twitter_username}
                     </a>
                   </div>
@@ -146,6 +152,7 @@ export default function User() {
             </div>
           </div>
         </div>
+        <RepoList repos={repos} />
       </div>
     </>
   );
